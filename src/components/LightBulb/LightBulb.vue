@@ -36,5 +36,6 @@ const roomStore = useRoomStore()
 
 const toggleLight = (): void => {
   roomStore.switchBulb()
+  isOn.value = !isOn.value
 }
 </script>

@@ -7,8 +7,8 @@ class BaseService {
 
   constructor() {
     this.service = axios.create({
-      // baseURL: 'http://localhost:3000', // Chỉ định baseURL ở đây
-      baseURL: 'http://192.168.186.145:8083',
+      baseURL: 'http://localhost:3000', // Chỉ định baseURL ở đây
+      // baseURL: 'http://192.168.186.145:8083',
       headers: {
         Authorization: `Bearer YOUR_ACCESS_TOKEN` // Cập nhật token nếu cần
       }

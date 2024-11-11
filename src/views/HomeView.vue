@@ -118,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue'
 import { Droplets, Wind, House, Thermometer, Fan } from 'lucide-vue-next'
 import { useWeatherStore } from '@/stores/weather'
 import LightBulb from '@/components/LightBulb/LightBulb.vue'
@@ -187,12 +187,43 @@ onBeforeUnmount(() => {
 //Quạt
 
 const fanSpeed = ref<number>(0)
+const currentFanLevel = ref<number>(-1)
 
 const fanSpeedText = computed((): string => {
   if (fanSpeed.value <= 0.5) return 'Tắt'
   if (fanSpeed.value < 33) return 'Chậm'
   if (fanSpeed.value < 66) return 'Vừa'
   return 'Nhanh'
+})
+
+function debounce(fn: Function, delay: number) {
+  let timeout: ReturnType<typeof setTimeout>
+  return function (...args: any[]) {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => fn(...args), delay)
+  }
+}
+// Hàm điều chỉnh quạt
+function adjustFanLevel() {
+  let newLevel
+  if (fanSpeed.value <= 0.5) newLevel = 0
+  else if (fanSpeed.value < 33) newLevel = 1
+  else if (fanSpeed.value < 66) newLevel = 2
+  else newLevel = 3
+
+  // Chỉ gọi nếu cấp độ mới khác cấp độ hiện tại
+  if (newLevel !== currentFanLevel.value) {
+    currentFanLevel.value = newLevel
+    roomStore.adjustFan(newLevel)
+  }
+}
+
+// Tạo phiên bản debounce cho hàm `adjustFanLevel`
+const debouncedAdjustFan = debounce(adjustFanLevel, 300) // 300ms
+
+// Theo dõi sự thay đổi của `fanSpeed` và gọi hàm debounce
+watch(fanSpeed, () => {
+  debouncedAdjustFan()
 })
 
 const fanIconClasses = computed((): Record<string, boolean> => {
