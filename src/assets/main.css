@@ -1,0 +1,5 @@
+@import './base.css';
+
+.router-link-active {
+  color: #2563eb;
+}

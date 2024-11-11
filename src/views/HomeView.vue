@@ -1,0 +1,224 @@
+<template>
+  <div class="grid grid-cols-1 md:grid-cols-2">
+    <div
+      class="flex justify-center items-center min-h-[400px] bg-gradient-to-r from-orange-100 to-purple-100 p-4 rounded-lg shadow-md"
+    >
+      <div
+        :class="[
+          'w-full max-w-md rounded-xl overflow-hidden shadow-lg transition-all duration-300'
+          // getBackgroundColor
+        ]"
+      >
+        <div class="p-8 bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-sm">
+          <div class="flex justify-between items-center mb-6">
+            <div>
+              <h2 class="text-3xl font-bold text-gray-800">
+                {{ weatherData.location }}
+              </h2>
+              <p class="text-sm text-gray-600">{{ formattedDate }}</p>
+            </div>
+            <div class="relative">
+              <!-- <component :is="getWeatherIcon" class="h-20 w-20 text-white filter drop-shadow-lg" /> -->
+              <img :src="weatherData.condition.icon" />
+            </div>
+          </div>
+          <div class="mb-6 bg-white/30 rounded-lg p-4 backdrop-blur-sm">
+            <p class="text-6xl font-bold text-gray-800">{{ weatherData.temperature }}°C</p>
+            <p class="text-lg text-gray-700">{{ weatherData.condition.text }}</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4 text-gray-700">
+            <div class="bg-white/30 rounded-lg p-3 backdrop-blur-sm flex items-center">
+              <Droplets class="h-6 w-6 mr-2 text-blue-500" />
+              <div>
+                <p class="text-sm font-semibold">Độ ẩm</p>
+                <p class="text-lg">{{ weatherData.humidity }}%</p>
+              </div>
+            </div>
+            <div class="bg-white/30 rounded-lg p-3 backdrop-blur-sm flex items-center">
+              <Wind class="h-6 w-6 mr-2 text-green-500" />
+              <div>
+                <p class="text-sm font-semibold">Gió</p>
+                <p class="text-lg">{{ weatherData.windSpeed }} km/h</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex justify-center items-center min-h-[400px] bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg shadow-md"
+    >
+      <div
+        :class="[
+          'w-full max-w-md rounded-xl overflow-hidden shadow-lg transition-all duration-300'
+          // getBackgroundColor
+        ]"
+      >
+        <div class="p-8 bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-sm">
+          <div class="flex justify-between items-center mb-4">
+            <div>
+              <h2 class="text-3xl font-bold text-gray-800 mb-2">Trong nhà</h2>
+              <p class="text-xl text-gray-600 font-semibold">{{ time }}</p>
+            </div>
+            <div class="relative">
+              <House size="30" />
+            </div>
+          </div>
+          <div class="mb-6 bg-white/30 rounded-lg p-4 backdrop-blur-sm flex space-x-4 items-center">
+            <Thermometer :size="48" class="text-red-500" />
+            <p class="text-6xl font-bold text-gray-800">{{ weatherData.temperature }}°C</p>
+          </div>
+          <div class="grid grid-cols-3 gap-4 text-gray-700">
+            <div class="bg-white/30 rounded-lg p-3 backdrop-blur-sm flex items-center">
+              <Droplets class="h-6 w-6 mr-2 text-blue-500" />
+              <div>
+                <p class="text-sm font-semibold">Độ ẩm</p>
+                <p class="text-lg">{{ weatherData.humidity }}%</p>
+              </div>
+            </div>
+            <div class="bg-white/30 col-span-2 rounded-lg p-4 backdrop-blur-sm max-w-xs w-full">
+              <div class="flex items-center space-x-2">
+                <div style="width: 70px">
+                  <Fan :class="['h-6 w-6 mr-2 text-purple-500', fanIconClasses]" />
+                  <span class="text-sm text-gray-700">{{ fanSpeedText }}</span>
+                </div>
+                <div>
+                  <!-- <div class="flex space-x-2">
+                    <p class="text-sm font-semibold">Quạt</p>
+                    <p>{{ fanSpeed }}</p>
+                  </div> -->
+                  <div class="space-y-2">
+                    <input
+                      type="range"
+                      id="fan-speed"
+                      v-model="fanSpeed"
+                      class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      min="0"
+                      max="100"
+                      step="1"
+                    />
+                    <div class="flex justify-between text-xs text-gray-500">
+                      <span>0</span>
+                      <span>50</span>
+                      <span>100</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex space-x-8 mt-4 w-full">
+    <div v-for="item in 2" :key="item" class="w-3/4"><LightBulb :number="item" /></div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { Droplets, Wind, House, Thermometer, Fan } from 'lucide-vue-next'
+import { useWeatherStore } from '@/stores/weather'
+import LightBulb from '@/components/LightBulb/LightBulb.vue'
+import { useRoomStore } from '@/stores/room'
+
+const roomStore = useRoomStore()
+
+const weatherStore = useWeatherStore()
+
+onMounted(async () => {
+  await weatherStore.fetchWeatherOutside()
+  await roomStore.getData()
+  console.log('â', weatherStore.weatherOutside)
+})
+
+const weatherData = computed(() => weatherStore.weatherOutside)
+
+const formattedDate = computed(() => {
+  return new Intl.DateTimeFormat('vi-VN', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(weatherData.value.date)
+})
+
+const getTimeString = (): string => {
+  const now = new Date()
+  const hours = String(now.getHours()).padStart(2, '0')
+  const minutes = String(now.getMinutes()).padStart(2, '0')
+  const seconds = String(now.getSeconds()).padStart(2, '0')
+  return `${hours}:${minutes}:${seconds}`
+}
+
+const time = ref<string>('')
+
+let intervalId: number
+
+onMounted(() => {
+  // Cập nhật thời gian ngay khi component được khởi tạo
+  time.value = getTimeString()
+
+  // Cập nhật thời gian mỗi giây
+  intervalId = setInterval(() => {
+    time.value = getTimeString()
+  }, 1000)
+})
+
+onBeforeUnmount(() => {
+  clearInterval(intervalId)
+})
+
+// const getBackgroundColor = computed(() => {
+//   switch (weatherData.value.condition.text.toLowerCase()) {
+//     case 'sunny':
+//       return 'bg-gradient-to-br from-yellow-200 to-orange-200'
+//     case 'rainy':
+//       return 'bg-gradient-to-br from-blue-200 to-gray-200'
+//     case 'Có Mây':
+//       return 'bg-gradient-to-br from-blue-200 to-gray-200'
+//     default:
+//       return 'bg-gradient-to-br from-gray-200 to-gray-300'
+//   }
+// })
+
+//Quạt
+
+const fanSpeed = ref<number>(0)
+
+const fanSpeedText = computed((): string => {
+  if (fanSpeed.value <= 0.5) return 'Tắt'
+  if (fanSpeed.value < 33) return 'Chậm'
+  if (fanSpeed.value < 66) return 'Vừa'
+  return 'Nhanh'
+})
+
+const fanIconClasses = computed((): Record<string, boolean> => {
+  return {
+    'h-5 w-5': true,
+    'text-gray-400': fanSpeed.value <= 0.5,
+    'text-blue-500 animate-spin': fanSpeed.value > 0.5,
+    '[animation-duration:1s]': fanSpeed.value > 0.5 && fanSpeed.value <= 33,
+    '[animation-duration:0.5s]': fanSpeed.value > 33 && fanSpeed.value <= 66,
+    '[animation-duration:0.25s]': fanSpeed.value > 66
+  }
+})
+</script>
+
+<style scoped>
+input[type='range'] {
+  -webkit-appearance: none;
+  @apply bg-gray-200;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  @apply w-4 h-4 rounded-full bg-purple-500 cursor-pointer;
+}
+
+input[type='range']::-moz-range-thumb {
+  @apply w-4 h-4 rounded-full bg-purple-500 cursor-pointer border-none;
+}
+</style>
