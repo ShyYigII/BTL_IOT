@@ -6,7 +6,7 @@
     <div class="p-6 space-y-6">
       <!-- Mode Selection -->
       <div class="flex items-center justify-between">
-        <span class="text-gray-700 font-medium">Mode:</span>
+        <span class="text-gray-700 font-medium">Chế độ:</span>
         <label class="flex items-center cursor-pointer">
           <div class="relative">
             <input type="checkbox" v-model="isAutoMode" class="sr-only" />
@@ -98,8 +98,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { FanIcon, MinusCircleIcon, PlusCircleIcon } from 'lucide-vue-next'
+import { ref } from 'vue'
+import { MinusCircleIcon, PlusCircleIcon } from 'lucide-vue-next'
 
 interface Temperatures {
   Nhanh: number

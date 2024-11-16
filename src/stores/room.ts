@@ -94,21 +94,35 @@ export const useRoomStore = defineStore('room', () => {
     }
   }
 
-  async function switchBulb() {
-    try {
-      bulb.value.mode = 0
-      const res = await service.putData('/bulb', bulb.value)
-      console.log(res)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   async function adjustFan(state: number) {
     try {
       fan.value.mode = 0
       fan.value.state = state
       const res = await service.putData('/fan', fan.value)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async function getLightData() {
+    try {
+      const res = await service.getData('/bulbcontrolhistory/2')
+      bulb.value = res.data.bulb
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async function switchBulb(data: bulb) {
+    try {
+      bulb.value.mode = 1 - bulb.value.mode
+      const res = await service.postData('/bulbcontrolhistory/2', {
+        bulb: data,
+        homeOwner: {
+          id: 1
+        }
+      })
+      console.log(res)
     } catch (e) {
       console.log(e)
     }
@@ -152,6 +166,8 @@ export const useRoomStore = defineStore('room', () => {
     flameSensorData,
     lightSensorData,
     tempSensorData,
-    goToPage
+    goToPage,
+    getLightData,
+    bulb
   }
 })

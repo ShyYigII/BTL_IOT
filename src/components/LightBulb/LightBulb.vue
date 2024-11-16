@@ -24,16 +24,26 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { LightbulbIcon } from 'lucide-vue-next'
 import { useRoomStore } from '@/stores/room'
 
-const isOn = ref<boolean>(false)
+const isOn = computed(() => {
+  return roomStore.bulb.state === 1 ? true : false
+})
 const props = defineProps<{ number: number }>()
+
 const roomStore = useRoomStore()
 
+onMounted(() => {
+  roomStore.getLightData()
+})
+
 const toggleLight = (): void => {
-  roomStore.switchBulb()
-  isOn.value = !isOn.value
+  roomStore.switchBulb({
+    ...roomStore.bulb,
+    state: 1 - roomStore.bulb.state
+  })
+  roomStore.bulb.state = 1 - roomStore.bulb.state
 }
 </script>

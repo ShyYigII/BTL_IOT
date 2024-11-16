@@ -9,7 +9,7 @@
         <span class="text-gray-700 font-medium">Chế độ:</span>
         <label class="flex items-center cursor-pointer">
           <div class="relative">
-            <input type="checkbox" v-model="isAutoMode" class="sr-only" />
+            <input v-model="isAutoMode" class="sr-only" @click="switchMode" />
             <div
               class="w-14 h-7 bg-gray-300 rounded-full shadow-inner transition-colors duration-300 ease-in-out"
               :class="{ 'bg-green-400': isAutoMode }"
@@ -42,10 +42,6 @@
               <span class="ml-2 text-gray-600">%</span>
             </div>
           </div>
-          <div class="flex items-center justify-between">
-            <span class="text-gray-700 font-medium">Độ sáng hiện tại</span>
-            <span class="text-indigo-600 font-bold">{{ currentBrightness }}%</span>
-          </div>
         </div>
 
         <!-- Manual Mode Settings -->
@@ -62,8 +58,11 @@
         </div>
         <div class="flex items-center justify-between mt-2">
           <span class="text-gray-700">Trạng thái đèn:</span>
-          <span class="font-medium" :class="isLightOn ? 'text-yellow-500' : 'text-gray-500'">
-            {{ isLightOn ? 'Bật' : 'Tăt' }}
+          <span
+            class="font-medium"
+            :class="roomStore.bulb.state === 1 ? 'text-yellow-500' : 'text-gray-500'"
+          >
+            {{ roomStore.bulb.state === 1 ? 'Bật' : 'Tăt' }}
           </span>
         </div>
       </div>
@@ -72,26 +71,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { useRoomStore } from '@/stores/room'
+import { ref, computed, onMounted } from 'vue'
+const roomStore = useRoomStore()
 
-const isAutoMode = ref(true)
+onMounted(() => {
+  roomStore.getLightData()
+})
+
+const isAutoMode = computed(() => roomStore.bulb.mode)
+
+function switchMode() {
+  roomStore.switchBulb({
+    ...roomStore.bulb,
+    mode: 1 - roomStore.bulb.mode
+  })
+}
+
 const lightThreshold = ref(30)
-const currentBrightness = ref(50)
-const manualBrightness = ref(50)
-
-const isLightOn = computed(() => {
-  if (isAutoMode.value) {
-    return currentBrightness.value < lightThreshold.value
-  } else {
-    return manualBrightness.value > 0
-  }
-})
-
-watch(isAutoMode, (newValue) => {
-  if (!newValue) {
-    manualBrightness.value = currentBrightness.value
-  }
-})
 </script>
 
 <style scoped>
