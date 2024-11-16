@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 lg:grid-cols-2 p-8 space-y-6">
+  <div class="grid grid-cols-1 lg:grid-cols-2 p-8">
     <FanControl />
     <LightControl />
   </div>
