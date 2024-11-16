@@ -49,18 +49,6 @@
         </div>
 
         <!-- Manual Mode Settings -->
-        <div v-else class="space-y-4">
-          <label for="manualBrightness" class="block text-gray-700 font-medium">Độ sáng:</label>
-          <input
-            id="manualBrightness"
-            v-model="manualBrightness"
-            type="range"
-            min="0"
-            max="100"
-            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-          />
-          <div class="text-center text-2xl font-bold text-gray-700">{{ manualBrightness }}%</div>
-        </div>
       </transition>
 
       <!-- Current Status -->
@@ -85,21 +73,11 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { LightbulbIcon } from 'lucide-vue-next'
 
 const isAutoMode = ref(true)
 const lightThreshold = ref(30)
 const currentBrightness = ref(50)
 const manualBrightness = ref(50)
-
-// Simulate changing brightness
-const simulateBrightnessChange = () => {
-  setInterval(() => {
-    currentBrightness.value = Math.floor(Math.random() * 101)
-  }, 3000)
-}
-
-simulateBrightnessChange()
 
 const isLightOn = computed(() => {
   if (isAutoMode.value) {

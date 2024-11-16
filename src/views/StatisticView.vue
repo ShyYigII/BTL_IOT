@@ -1,54 +1,87 @@
 <template>
-  <div class="max-w-4xl mx-auto p-4">
-    <div class="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+  <div class="relative inline-block text-left ml-8 mt-8" style="width: 200px">
+    <div>
       <button
-        v-for="tab in tabs"
-        :key="tab.id"
-        @click="changeSensor(tab.id)"
-        :class="[
-          'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
-          'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
-          { 'bg-white text-blue-700 shadow': activeTab === tab.id },
-          { 'text-white-100 hover:bg-white/[0.12] hover:text-white': activeTab !== tab.id }
-        ]"
+        @click="isOpen = !isOpen"
+        type="button"
+        class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+        id="options-menu"
+        aria-haspopup="true"
+        :aria-expanded="isOpen"
       >
-        {{ tab.name }}
+        {{ selectedOption.label }}
+        <svg
+          class="-mr-1 ml-2 h-5 w-5"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          />
+        </svg>
       </button>
     </div>
-    <div class="mt-4">
-      <SensorTable :sensor-id="1" v-if="activeTab === 1" />
-      <SensorTable :sensor-id="2" v-if="activeTab === 2" />
-      <SensorTable :sensor-id="3" v-if="activeTab === 3" />
-    </div>
+
+    <transition
+      enter-active-class="transition ease-out duration-100"
+      enter-from-class="transform opacity-0 scale-95"
+      enter-to-class="transform opacity-100 scale-100"
+      leave-active-class="transition ease-in duration-75"
+      leave-from-class="transform opacity-100 scale-100"
+      leave-to-class="transform opacity-0 scale-95"
+    >
+      <div
+        v-if="isOpen"
+        class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+      >
+        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+          <a
+            v-for="option in menuOptions"
+            :key="option.value"
+            @click="selectOption(option)"
+            href="#"
+            class="block px-4 py-2 text-md font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+            role="menuitem"
+            style="width: 200px"
+          >
+            {{ option.label }}
+          </a>
+        </div>
+      </div>
+    </transition>
   </div>
+
+  <component :is="selectedComponent" />
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import SensorTable from '@/components/SensorTable/SensorTable.vue'
-import { useRoomStore } from '@/stores/room'
+import DeviceData from '@/components/DeviceData/DeviceData.vue'
+import SensorData from '@/components/SensorData/SensorData.vue'
+import { computed, ref } from 'vue'
 
-const roomStore = useRoomStore()
-
-onMounted(() => {
-  roomStore.getSensorData(1, 1)
-  roomStore.getSensorData(2, 1)
-  roomStore.getSensorData(3, 1)
-})
-
-interface Tab {
-  id: number
-  name: string
+interface MenuOption {
+  label: string
+  value: string
 }
 
-const tabs: Tab[] = [
-  { id: 1, name: 'Cảm biến lửa' },
-  { id: 2, name: 'Cảm biến nhiệt độ' },
-  { id: 3, name: 'Cảm biến ánh sáng' }
+const menuOptions: MenuOption[] = [
+  { label: 'Dữ liệu thiết bị', value: 'data1' },
+  { label: 'Dữ liệu cảm biến', value: 'data2' }
 ]
-const activeTab = ref<number>(1)
 
-const changeSensor = (id: number) => {
-  activeTab.value = id
+const isOpen = ref(false)
+const selectedOption = ref(menuOptions[0])
+
+const selectOption = (option: MenuOption) => {
+  selectedOption.value = option
+  isOpen.value = false
 }
+
+const selectedComponent = computed(() => {
+  return selectedOption.value.value === 'data1' ? DeviceData : SensorData
+})
 </script>
