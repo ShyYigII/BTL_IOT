@@ -66,7 +66,9 @@
           </div>
           <div class="mb-6 bg-white/30 rounded-lg p-4 backdrop-blur-sm flex space-x-4 items-center">
             <Thermometer :size="48" class="text-red-500" />
-            <p class="text-6xl font-bold text-gray-800">{{ weatherData.temperature }}°C</p>
+            <p class="text-6xl font-bold text-gray-800">
+              {{ roomStore.tempSensorData[0].value }}°C
+            </p>
           </div>
           <div class="grid grid-cols-3 gap-4 text-gray-700">
             <div class="bg-white/30 rounded-lg backdrop-blur-sm flex justify-center">
@@ -127,6 +129,7 @@ const weatherStore = useWeatherStore()
 onMounted(async () => {
   await weatherStore.fetchWeatherOutside()
   await roomStore.getData()
+  await roomStore.getSensorData(3, 1)
   console.log('â', weatherStore.weatherOutside)
 })
 

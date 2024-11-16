@@ -116,7 +116,7 @@ export const useRoomStore = defineStore('room', () => {
 
   async function getSensorData(id: number, page: number) {
     try {
-      const res = await service.getData(`/dataSensor/${id}?page=${page}`)
+      const res = await service.getData(`/sensordata/${id}?page=${page}`)
       if (id === 1) {
         flameSensorData.value = res.data.data
         currentPage.value[id] = res.data.currentPage
