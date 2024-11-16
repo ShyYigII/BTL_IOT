@@ -22,7 +22,7 @@
           :key="index"
         >
           <td class="stt-column">{{ index + 1 }}</td>
-          <td>{{ item?.date }}</td>
+          <td>{{ item?.time }}</td>
           <td>{{ item?.value }}</td>
         </tr>
       </tbody>
@@ -128,7 +128,7 @@ function prevPage() {
 }
 
 function nextPage() {
-  if (roomStore.currentPage < roomStore.totalPage) {
+  if (roomStore.currentPage[props.sensorId] < roomStore.totalPage[props.sensorId]) {
     roomStore.goToPage(activeTab.value, roomStore.currentPage[props.sensorId] + 1)
   }
 }

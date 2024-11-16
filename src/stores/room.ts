@@ -27,7 +27,7 @@ interface fan {
 }
 
 interface SensorData {
-  date: string
+  time: string
   value: number
 }
 
@@ -74,9 +74,9 @@ export const useRoomStore = defineStore('room', () => {
   const flameSensors = ref({})
   const lightSensors = ref({})
   const temperatureSensors = ref({})
-  const lightSensorData = ref<SensorData[]>([{ date: '...loading', value: -1 }])
-  const tempSensorData = ref<SensorData[]>([{ date: '...loading', value: -1 }])
-  const flameSensorData = ref<SensorData[]>([{ date: '...loading', value: -1 }])
+  const lightSensorData = ref<SensorData[]>([{ time: '...loading', value: -1 }])
+  const tempSensorData = ref<SensorData[]>([{ time: '...loading', value: -1 }])
+  const flameSensorData = ref<SensorData[]>([{ time: '...loading', value: -1 }])
 
   const temp = ref<number>(0)
 
@@ -135,8 +135,9 @@ export const useRoomStore = defineStore('room', () => {
     }
   }
   async function goToPage(id: number, page: number) {
-    if (page >= 1 && page <= totalPage.value[1]) {
+    if (page >= 1 && page <= totalPage.value[id]) {
       await getSensorData(id, page)
+      currentPage.value[id] = page
     }
   }
 
