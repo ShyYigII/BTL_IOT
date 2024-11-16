@@ -15,6 +15,7 @@
         'fixed inset-y-0 left-0 z-10 w-64 bg-white dark:bg-gray-900 text-gray-800 dark:text-white transition-transform duration-300 ease-in-out transform',
         isOpen || !isMobile ? 'translate-x-0' : '-translate-x-full'
       ]"
+      style="z-index: 1000"
     >
       <div class="flex flex-col h-full">
         <!-- Logo -->
@@ -49,7 +50,7 @@
             class="mt-4 w-full px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <LogOutIcon class="h-4 w-4 inline-block mr-2" />
-            Log out
+            Đăng xuất
           </button>
         </div>
       </div>
@@ -79,11 +80,11 @@ const isOpen = ref(false)
 const isMobile = ref(window.innerWidth < 1024)
 
 const navItems = [
-  { name: 'Home', icon: HomeIcon, href: '/home' },
-  { name: 'Settings', icon: SettingsIcon, href: '/setting' },
-  { name: 'My account', icon: CircleUserIcon, href: '/my-account' },
-  { name: 'Statistic', icon: ChartColumn, href: '/statistic' },
-  { name: 'Help', icon: HelpCircleIcon, href: '/help' }
+  { name: 'Trang chủ', icon: HomeIcon, href: '/home' },
+  { name: 'Cài đặt', icon: SettingsIcon, href: '/setting' },
+  { name: 'Tài khoản của tôi', icon: CircleUserIcon, href: '/my-account' },
+  { name: 'Thống kê', icon: ChartColumn, href: '/statistic' },
+  { name: 'Trờ giúp', icon: HelpCircleIcon, href: '/help' }
 ]
 
 const toggleSidebar = () => {

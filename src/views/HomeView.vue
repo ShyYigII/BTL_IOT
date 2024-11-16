@@ -69,12 +69,8 @@
             <p class="text-6xl font-bold text-gray-800">{{ weatherData.temperature }}°C</p>
           </div>
           <div class="grid grid-cols-3 gap-4 text-gray-700">
-            <div class="bg-white/30 rounded-lg p-3 backdrop-blur-sm flex items-center">
-              <Droplets class="h-6 w-6 mr-2 text-blue-500" />
-              <div>
-                <p class="text-sm font-semibold">Độ ẩm</p>
-                <p class="text-lg">{{ weatherData.humidity }}%</p>
-              </div>
+            <div class="bg-white/30 rounded-lg backdrop-blur-sm flex justify-center">
+              <LightBulb :number="1" />
             </div>
             <div class="bg-white/30 col-span-2 rounded-lg p-4 backdrop-blur-sm max-w-xs w-full">
               <div class="flex items-center space-x-2">
@@ -112,9 +108,9 @@
     </div>
   </div>
 
-  <div class="flex space-x-8 mt-4 w-full">
+  <!-- <div class="flex space-x-8 mt-4 w-full">
     <div v-for="item in 2" :key="item" class="w-3/4"><LightBulb :number="item" /></div>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">

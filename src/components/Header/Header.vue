@@ -2,6 +2,7 @@
   <main>
     <nav
       class="fixed top-0 w-full bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700 text-gray-800 dark:text-gray-300"
+      style="z-index: 999"
     >
       <div class="max-w-8xl mx-auto items-center flex justify-between">
         <div class="flex items-center py-4 lg:px-8 ml-auto relative">

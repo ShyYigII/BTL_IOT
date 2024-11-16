@@ -1,0 +1,207 @@
+<template>
+  <div class="data-table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th class="stt-column">STT</th>
+          <th>
+            <button>Ngày</button>
+          </th>
+          <th>
+            <button>Giá trị</button>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(item, index) in props.sensorId === 1
+            ? roomStore.flameSensorData
+            : props.sensorId === 2
+              ? roomStore.lightSensorData
+              : roomStore.tempSensorData"
+          :key="index"
+        >
+          <td class="stt-column">{{ index + 1 }}</td>
+          <td>{{ item?.date }}</td>
+          <td>{{ item?.value }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!--pagination-->
+
+  <div class="flex justify-center mt-3">
+    <nav class="mt-3" aria-label="Page navigation example">
+      <ul class="inline-flex -space-x-px text-sm cursor-pointer">
+        <li>
+          <a
+            @click.prevent="prevPage"
+            :class="{
+              'bg-gray-100 text-gray-700': roomStore.currentPage[props.sensorId] === 1,
+              'text-gray-500': roomStore.currentPage[props.sensorId] !== 1
+            }"
+            class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 rounded-s-lg hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            Trước
+          </a>
+        </li>
+        <!-- Display pages around the current page with ellipsis -->
+        <li v-if="startPage > 1">
+          <a
+            @click.prevent="goToPage(1)"
+            class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >1</a
+          >
+        </li>
+        <li v-for="page in pagesArray" :key="page">
+          <a
+            @click.prevent="goToPage(page)"
+            :class="{
+              'bg-blue-50 text-blue-600': roomStore.currentPage[props.sensorId] === page,
+              'text-gray-500': roomStore.currentPage[props.sensorId] !== page
+            }"
+            class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            {{ page }}
+          </a>
+        </li>
+        <li v-if="endPage < roomStore.totalPage[props.sensorId]">
+          <a
+            @click.prevent="goToPage(roomStore.totalPage[props.sensorId])"
+            class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            >{{ roomStore.totalPage }}</a
+          >
+        </li>
+        <li>
+          <a
+            @click.prevent="nextPage"
+            :class="{
+              'bg-gray-100 text-gray-700': roomStore.currentPage === roomStore.totalPage,
+              'text-gray-500': roomStore.currentPage !== roomStore.totalPage
+            }"
+            class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 rounded-e-lg hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          >
+            Sau
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useRoomStore } from '@/stores/room'
+import { ref, onMounted, computed } from 'vue'
+
+const roomStore = useRoomStore()
+
+onMounted(async () => {
+  await roomStore.getSensorData(props.sensorId, 1)
+})
+
+const props = defineProps<{
+  sensorId: number
+}>()
+
+const maxPagesToShow = 5 // Maximum number of pages to display
+
+const startPage = computed(() =>
+  Math.max(1, roomStore.currentPage[props.sensorId] - Math.floor(maxPagesToShow / 2))
+)
+const endPage = computed(() =>
+  Math.min(roomStore.totalPage[props.sensorId], startPage.value + maxPagesToShow - 1)
+)
+const pagesArray = computed(() => {
+  const pages = []
+  for (let i = startPage.value; i <= endPage.value; i++) {
+    pages.push(i)
+  }
+  return pages
+})
+
+const activeTab = ref<number>(props.sensorId)
+
+function prevPage() {
+  if (roomStore.currentPage[props.sensorId] > 1) {
+    roomStore.goToPage(activeTab.value, roomStore.currentPage[props.sensorId] - 1)
+  }
+}
+
+function nextPage() {
+  if (roomStore.currentPage < roomStore.totalPage) {
+    roomStore.goToPage(activeTab.value, roomStore.currentPage[props.sensorId] + 1)
+  }
+}
+
+function goToPage(page: number) {
+  console.log('goto ', page)
+  roomStore.goToPage(activeTab.value, page)
+}
+</script>
+
+<style scoped>
+.data-table-container {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 14px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.data-table thead {
+  background-color: #f5f5f5;
+}
+
+.data-table th {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #666666;
+}
+
+.data-table tbody tr:hover {
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
+}
+
+.stt-column {
+  width: 60px;
+  text-align: center;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: #666666;
+  transition: color 0.3s ease;
+}
+
+@media (max-width: 600px) {
+  .data-table th,
+  .data-table td {
+    padding: 8px 10px;
+  }
+
+  .data-table {
+    font-size: 12px;
+  }
+}
+</style>
