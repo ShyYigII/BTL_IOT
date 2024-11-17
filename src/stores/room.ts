@@ -133,11 +133,28 @@ export const useRoomStore = defineStore('room', () => {
     }
   }
 
-  async function adjustFan(state: number) {
+  async function adjustFan(state: number, mode: number) {
     try {
-      fan.value.mode = 0
+      fan.value.mode = mode
       fan.value.state = state
-      const res = await service.putData('/fan', fan.value)
+      const res = await service.postData('/fancontrolhistory', {
+        homeOwner: {
+          id: 1
+        },
+        fan: {
+          id: fan.value.id,
+          state: fan.value.state,
+          mode: fan.value.mode
+        }
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async function changeThreshhold(data) {
+    try {
+      const res = await service.postData('/speedmodifyhistory', data)
     } catch (e) {
       console.log(e)
     }
@@ -243,6 +260,8 @@ export const useRoomStore = defineStore('room', () => {
     bulbData,
     getDeviceData,
     goToPageDevice,
-    fanData
+    fanData,
+    fan,
+    changeThreshhold
   }
 })

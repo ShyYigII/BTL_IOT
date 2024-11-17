@@ -16,7 +16,7 @@
           <th>
             <button>Trạng thái</button>
           </th>
-          <th v-if="props.sensorId === 3">
+          <th v-if="props.sensorId === 1">
             <button>Ngưỡng thiết lập</button>
           </th>
         </tr>
@@ -28,10 +28,10 @@
         >
           <td class="stt-column">{{ index + 1 }}</td>
           <td>{{ item?.starttime }}</td>
-          <td>{{ item?.endtime }}</td>
+          <td>{{ item?.endtime === null ? 'Hiện tại' : item?.endtime }}</td>
           <td>{{ item?.mode }}</td>
           <td>{{ item?.state }}</td>
-          <td v-if="props.sensorId === 3">{{ item?.threshold }}</td>
+          <td v-if="props.sensorId === 1">{{ item?.threshold }}</td>
         </tr>
       </tbody>
     </table>

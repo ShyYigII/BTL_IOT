@@ -9,7 +9,7 @@
         <span class="text-gray-700 font-medium">Chế độ:</span>
         <label class="flex items-center cursor-pointer">
           <div class="relative">
-            <input type="checkbox" v-model="isAutoMode" class="sr-only" />
+            <input @click="switchMode" v-model="isAutoMode" class="sr-only" />
             <div
               class="w-14 h-7 bg-gray-300 rounded-full shadow-inner transition-colors duration-300 ease-in-out"
               :class="{ 'bg-green-400': isAutoMode }"
@@ -27,7 +27,7 @@
 
       <!-- Automatic Mode Settings -->
       <transition name="fade" mode="out-in">
-        <div v-if="isAutoMode" class="space-y-4">
+        <div v-if="isAutoMode" class="space-y-4 bg-gray-100 p-4 rounded-lg">
           <div
             v-for="(temp, speed) in temperatures"
             :key="speed"
@@ -60,21 +60,17 @@
               <span class="ml-2 text-gray-600">°C</span>
             </div>
           </div>
+          <div class="flex mt-2 justify-end">
+            <button
+              class="bg-blue-500 rounded-lg py-2 px-4 text-white font-semibold"
+              @click="handleChangeThreshold"
+            >
+              Lưu
+            </button>
+          </div>
         </div>
 
         <!-- Manual Mode Settings -->
-        <div v-else class="space-y-4">
-          <label for="manualSpeed" class="block text-gray-700 font-medium">Tốc độ quạt:</label>
-          <input
-            id="manualSpeed"
-            v-model="manualSpeed"
-            type="range"
-            min="0"
-            max="100"
-            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-          />
-          <div class="text-center text-2xl font-bold text-gray-700">{{ manualSpeed }}%</div>
-        </div>
       </transition>
 
       <!-- Current Status -->
@@ -89,7 +85,7 @@
         <div class="flex items-center justify-between mt-2">
           <span class="text-gray-700">{{ isAutoMode ? 'Tốc độ hiện tại:' : 'Tốc độ quạt:' }}</span>
           <span class="font-medium text-purple-600">
-            {{ isAutoMode ? getCurrentSpeed() : `${manualSpeed}%` }}
+            {{ currentSpeed }}
           </span>
         </div>
       </div>
@@ -98,8 +94,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { MinusCircleIcon, PlusCircleIcon } from 'lucide-vue-next'
+import { useRoomStore } from '@/stores/room'
+const roomStore = useRoomStore()
 
 interface Temperatures {
   Nhanh: number
@@ -107,37 +105,67 @@ interface Temperatures {
   Chậm: number
 }
 
-const isAutoMode = ref(true)
+const isAutoMode = ref(roomStore.fan.mode === 0 ? false : true)
 const temperatures = ref<Temperatures>({
-  Nhanh: 30,
-  Vừa: 25,
-  Chậm: 20
+  Nhanh: roomStore.fan.speeds[2].threshold,
+  Vừa: roomStore.fan.speeds[1].threshold,
+  Chậm: roomStore.fan.speeds[0].threshold
 })
-const manualSpeed = ref(50)
 
 const capitalizeFirstLetter = (string: string): string => {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
-const getCurrentSpeed = (): string => {
-  const currentTemp = 28 // This would typically come from a sensor
-  if (currentTemp >= temperatures.value.Nhanh) return 'Nhanh'
-  if (currentTemp >= temperatures.value.Vừa) return 'Vừa'
-  if (currentTemp >= temperatures.value.Chậm) return 'Chậm'
+const currentTemp = computed(() => roomStore.tempSensorData[0].value)
+
+const currentSpeed = ref<string>('Tắt')
+
+const getCurrentSpeed = async (): Promise<string> => {
+  // This would typically come from a sensor
+  if (roomStore.fan.state === 3) return 'Nhanh'
+  if (roomStore.fan.state === 2) return 'Vừa'
+  if (roomStore.fan.state === 1) return 'Chậm'
   return 'Tắt'
 }
 
 const decreaseTemp = (speed: keyof Temperatures) => {
-  if (temperatures.value[speed] > 0) {
-    temperatures.value[speed]--
-  }
+  temperatures.value[speed]--
 }
 
 const increaseTemp = (speed: keyof Temperatures) => {
-  if (temperatures.value[speed] < 40) {
-    temperatures.value[speed]++
-  }
+  temperatures.value[speed]++
 }
+
+const handleChangeThreshold = async () => {
+  await roomStore.changeThreshhold([
+    {
+      id: 1,
+      speed: 1,
+      threshold: temperatures.value['Chậm']
+    },
+    {
+      id: 2,
+      speed: 2,
+      threshold: temperatures.value['Vừa']
+    },
+    {
+      id: 3,
+      speed: 3,
+      threshold: temperatures.value['Nhanh']
+    }
+  ])
+  await roomStore.getData()
+}
+async function switchMode() {
+  await roomStore.adjustFan(0, 1)
+}
+
+onMounted(async () => {
+  await roomStore.getData()
+  await roomStore.getSensorData(3, 1)
+
+  getCurrentSpeed()
+})
 </script>
 
 <style scoped>

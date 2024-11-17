@@ -170,19 +170,6 @@ onBeforeUnmount(() => {
   clearInterval(intervalId)
 })
 
-// const getBackgroundColor = computed(() => {
-//   switch (weatherData.value.condition.text.toLowerCase()) {
-//     case 'sunny':
-//       return 'bg-gradient-to-br from-yellow-200 to-orange-200'
-//     case 'rainy':
-//       return 'bg-gradient-to-br from-blue-200 to-gray-200'
-//     case 'Có Mây':
-//       return 'bg-gradient-to-br from-blue-200 to-gray-200'
-//     default:
-//       return 'bg-gradient-to-br from-gray-200 to-gray-300'
-//   }
-// })
-
 //Quạt
 
 const fanSpeed = ref<number>(0)
@@ -213,7 +200,7 @@ function adjustFanLevel() {
   // Chỉ gọi nếu cấp độ mới khác cấp độ hiện tại
   if (newLevel !== currentFanLevel.value) {
     currentFanLevel.value = newLevel
-    roomStore.adjustFan(newLevel)
+    roomStore.adjustFan(newLevel, 0)
   }
 }
 
