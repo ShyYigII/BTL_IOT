@@ -190,7 +190,7 @@ export const useRoomStore = defineStore('room', () => {
   }
 
   async function getDeviceData(id: number, page: number) {
-    const devices = ['', '', 'bulbcontrolhistory', 'fancontrolhistory']
+    const devices = ['', 'fancontrolhistory', 'bulbcontrolhistory', '']
     try {
       const res = await service.getData(`/${devices[id]}/${id}?page=${page}`)
       // if (id === 1) {

@@ -81,9 +81,10 @@ onMounted(() => {
 const isAutoMode = computed(() => roomStore.bulb.mode)
 
 function switchMode() {
+  roomStore.bulb.mode = 1 - roomStore.bulb.mode
   roomStore.switchBulb({
     ...roomStore.bulb,
-    mode: 1 - roomStore.bulb.mode
+    mode: roomStore.bulb.mode
   })
 }
 </script>

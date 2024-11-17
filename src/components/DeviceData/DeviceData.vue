@@ -17,7 +17,7 @@
     </div>
     <div class="mt-4">
       <DeviceTable :sensor-id="2" v-if="activeTab === 2" />
-      <DeviceTable :sensor-id="3" v-if="activeTab === 3" />
+      <DeviceTable :sensor-id="1" v-if="activeTab === 1" />
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@ import { ref } from 'vue'
 const tabs: Tab[] = [
   // { id: 1, name: 'Cảm biến lửa' },
   { id: 2, name: 'Đèn' },
-  { id: 3, name: 'Quạt' }
+  { id: 1, name: 'Quạt' }
 ]
 const activeTab = ref<number>(2)
 
