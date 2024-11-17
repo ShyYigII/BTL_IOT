@@ -106,17 +106,20 @@ export const useRoomStore = defineStore('room', () => {
 
   async function getLightData() {
     try {
-      const res = await service.getData('/bulbcontrolhistory/2')
-      bulb.value = res.data.bulb
+
+      const res = await service.getData('/room/1')
+      bulb.value = res.data.bulbs[0]
+      console.log('data' ,res.data)
     } catch (e) {
+
       console.log(e)
     }
   }
 
   async function switchBulb(data: bulb) {
     try {
-      bulb.value.mode = 1 - bulb.value.mode
-      const res = await service.postData('/bulbcontrolhistory/2', {
+      // bulb.value.mode = 1 - bulb.value.mode
+      const res = await service.postData('/bulbcontrolhistory', {
         bulb: data,
         homeOwner: {
           id: 1
