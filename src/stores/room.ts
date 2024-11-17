@@ -154,7 +154,15 @@ export const useRoomStore = defineStore('room', () => {
 
   async function changeThreshhold(data) {
     try {
-      const res = await service.postData('/speedmodifyhistory', data)
+      const res = await service.postData('/speedmodifyhistory', {
+        homeOwner: {
+          id: 1
+        },
+        fan: {
+          id: 1,
+          speeds: data
+        }
+      })
     } catch (e) {
       console.log(e)
     }

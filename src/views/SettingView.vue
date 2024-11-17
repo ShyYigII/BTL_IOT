@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-2 p-8">
-    <FanControl />
-    <LightControl />
+    <div class="flex justify-center"><FanControl /></div>
+    <div class="flex justify-center"><LightControl /></div>
   </div>
 </template>
 

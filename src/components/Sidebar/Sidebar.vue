@@ -19,7 +19,7 @@
     >
       <div class="flex flex-col h-full">
         <!-- Logo -->
-        <a href="/home">
+        <a href="/">
           <div
             class="flex items-center h-16 px-4 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-900"
           >
@@ -80,7 +80,7 @@ const isOpen = ref(false)
 const isMobile = ref(window.innerWidth < 1024)
 
 const navItems = [
-  { name: 'Trang chủ', icon: HomeIcon, href: '/home' },
+  { name: 'Trang chủ', icon: HomeIcon, href: '/' },
   { name: 'Cài đặt', icon: SettingsIcon, href: '/setting' },
   { name: 'Tài khoản của tôi', icon: CircleUserIcon, href: '/my-account' },
   { name: 'Thống kê', icon: ChartColumn, href: '/statistic' },
