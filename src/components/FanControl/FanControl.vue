@@ -165,8 +165,8 @@ onMounted(async () => {
   await roomStore.getData()
 
   temperatures.value['Nhanh'] = roomStore.fan.speeds[2].threshold
-  temperatures.value['Vừa']: roomStore.fan.speeds[1].threshold,
-  temperatures.value['Chậm']: roomStore.fan.speeds[0].threshold
+  temperatures.value['Vừa'] = roomStore.fan.speeds[1].threshold,
+  temperatures.value['Chậm'] = roomStore.fan.speeds[0].threshold
   await roomStore.getSensorData(3, 1)
 
   getCurrentSpeed()

@@ -73,7 +73,7 @@ const flameStore = useFlameStore()
 let intervalId: number
 
 onMounted(() => {
- // intervalId = setInterval(flameStore.getIsFire, 5000) // Gửi thông báo mỗi 5 giây
+  intervalId = setInterval(flameStore.getIsFire, 5000) // Gửi thông báo mỗi 5 giây
 })
 
 // Xóa interval khi component unmount

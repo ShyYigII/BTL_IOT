@@ -7,8 +7,8 @@ export const useFlameStore = defineStore('flameNoti', () => {
 
   async function getIsFire() {
     try {
-      const res = await service.getData('/fire')
-      isFire.value = res.data.data
+      const res = await service.getData('/sensordata/1/newest')
+      isFire.value = res.data.value === 1 ? false : true
       console.log('data', res.data)
     } catch (e) {
       console.log(e)
