@@ -28,8 +28,8 @@ import SensorTable from '@/components/SensorTable/SensorTable.vue'
 import { onMounted, ref } from 'vue'
 const tabs: Tab[] = [
   { id: 1, name: 'Cảm biến lửa' },
-  { id: 2, name: 'Cảm biến nhiệt độ' },
-  { id: 3, name: 'Cảm biến ánh sáng' }
+  { id: 2, name: 'Cảm biến ánh sáng' },
+  { id: 3, name: 'Cảm biến nhiệt độ' }
 ]
 const activeTab = ref<number>(1)
 

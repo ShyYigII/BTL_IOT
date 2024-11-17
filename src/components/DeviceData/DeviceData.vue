@@ -16,22 +16,21 @@
       </button>
     </div>
     <div class="mt-4">
-      <SensorTable :sensor-id="1" v-if="activeTab === 1" />
-      <SensorTable :sensor-id="2" v-if="activeTab === 2" />
-      <SensorTable :sensor-id="3" v-if="activeTab === 3" />
+      <DeviceTable :sensor-id="2" v-if="activeTab === 2" />
+      <DeviceTable :sensor-id="3" v-if="activeTab === 3" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import SensorTable from '@/components/SensorTable/SensorTable.vue'
-import { onMounted, ref } from 'vue'
+import DeviceTable from '../DeviceTable/DeviceTable .vue'
+import { ref } from 'vue'
 const tabs: Tab[] = [
-  { id: 1, name: 'Cảm biến lửa' },
-  { id: 2, name: 'Cảm biến nhiệt độ' },
-  { id: 3, name: 'Cảm biến ánh sáng' }
+  // { id: 1, name: 'Cảm biến lửa' },
+  { id: 2, name: 'Đèn' },
+  { id: 3, name: 'Quạt' }
 ]
-const activeTab = ref<number>(1)
+const activeTab = ref<number>(2)
 
 const changeSensor = (id: number) => {
   activeTab.value = id
@@ -42,15 +41,15 @@ interface Tab {
   name: string
 }
 
-import { useRoomStore } from '@/stores/room'
+// import { useRoomStore } from '@/stores/room'
 
-const roomStore = useRoomStore()
+// const roomStore = useRoomStore()
 
-onMounted(() => {
-  roomStore.getSensorData(1, 1)
-  roomStore.getSensorData(2, 1)
-  roomStore.getSensorData(3, 1)
-})
+// onMounted(() => {
+//   roomStore.getSensorData(1, 1)
+//   roomStore.getSensorData(2, 1)
+//   roomStore.getSensorData(3, 1)
+// })
 </script>
 
 <style scoped></style>

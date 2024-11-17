@@ -84,7 +84,7 @@ const navItems = [
   { name: 'Cài đặt', icon: SettingsIcon, href: '/setting' },
   { name: 'Tài khoản của tôi', icon: CircleUserIcon, href: '/my-account' },
   { name: 'Thống kê', icon: ChartColumn, href: '/statistic' },
-  { name: 'Trờ giúp', icon: HelpCircleIcon, href: '/help' }
+  { name: 'Trợ giúp', icon: HelpCircleIcon, href: '/help' }
 ]
 
 const toggleSidebar = () => {

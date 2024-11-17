@@ -11,22 +11,27 @@
             <button>Kết thúc</button>
           </th>
           <th>
-            <button>Giá trị</button>
+            <button>Chế độ</button>
+          </th>
+          <th>
+            <button>Trạng thái</button>
+          </th>
+          <th v-if="props.sensorId === 3">
+            <button>Ngưỡng thiết lập</button>
           </th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="(item, index) in props.sensorId === 1
-            ? roomStore.flameSensorData
-            : props.sensorId === 2
-              ? roomStore.lightSensorData
-              : roomStore.tempSensorData"
+          v-for="(item, index) in props.sensorId === 2 ? roomStore.bulbData : roomStore.fanData"
           :key="index"
         >
           <td class="stt-column">{{ index + 1 }}</td>
-          <td>{{ item?.time }}</td>
-          <td>{{ item?.value }}</td>
+          <td>{{ item?.starttime }}</td>
+          <td>{{ item?.endtime }}</td>
+          <td>{{ item?.mode }}</td>
+          <td>{{ item?.state }}</td>
+          <td v-if="props.sensorId === 3">{{ item?.threshold }}</td>
         </tr>
       </tbody>
     </table>
@@ -51,14 +56,14 @@
         <!-- Display pages around the current page with ellipsis -->
         <li v-if="startPage > 1">
           <a
-            @click.prevent="goToPage(1)"
+            @click.prevent="goToPageDevice(1)"
             class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >1</a
           >
         </li>
         <li v-for="page in pagesArray" :key="page">
           <a
-            @click.prevent="goToPage(page)"
+            @click.prevent="goToPageDevice(page)"
             :class="{
               'bg-blue-50 text-blue-600': roomStore.currentPage[props.sensorId] === page,
               'text-gray-500': roomStore.currentPage[props.sensorId] !== page
@@ -70,7 +75,7 @@
         </li>
         <li v-if="endPage < roomStore.totalPage[props.sensorId]">
           <a
-            @click.prevent="goToPage(roomStore.totalPage[props.sensorId])"
+            @click.prevent="goToPageDevice(roomStore.totalPage[props.sensorId])"
             class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >{{ roomStore.totalPage }}</a
           >
@@ -99,7 +104,7 @@ import { ref, onMounted, computed } from 'vue'
 const roomStore = useRoomStore()
 
 onMounted(async () => {
-  await roomStore.getSensorData(props.sensorId, 1)
+  await roomStore.getDeviceData(props.sensorId, 1)
 })
 
 const props = defineProps<{
@@ -126,19 +131,19 @@ const activeTab = ref<number>(props.sensorId)
 
 function prevPage() {
   if (roomStore.currentPage[props.sensorId] > 1) {
-    roomStore.goToPage(activeTab.value, roomStore.currentPage[props.sensorId] - 1)
+    roomStore.goToPageDevice(activeTab.value, roomStore.currentPage[props.sensorId] - 1)
   }
 }
 
 function nextPage() {
   if (roomStore.currentPage[props.sensorId] < roomStore.totalPage[props.sensorId]) {
-    roomStore.goToPage(activeTab.value, roomStore.currentPage[props.sensorId] + 1)
+    roomStore.goToPageDevice(activeTab.value, roomStore.currentPage[props.sensorId] + 1)
   }
 }
 
-function goToPage(page: number) {
+function goToPageDevice(page: number) {
   console.log('goto ', page)
-  roomStore.goToPage(activeTab.value, page)
+  roomStore.goToPageDevice(activeTab.value, page)
 }
 </script>
 

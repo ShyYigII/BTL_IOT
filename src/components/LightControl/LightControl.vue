@@ -26,7 +26,7 @@
       </div>
 
       <!-- Automatic Mode Settings -->
-      <transition name="fade" mode="out-in">
+      <!-- <transition name="fade" mode="out-in">
         <div v-if="isAutoMode" class="space-y-4">
           <div class="flex items-center justify-between">
             <label for="threshold" class="text-gray-700 font-medium">Ngưỡng bật đèn:</label>
@@ -44,8 +44,7 @@
           </div>
         </div>
 
-        <!-- Manual Mode Settings -->
-      </transition>
+      </transition> -->
 
       <!-- Current Status -->
       <div class="p-4 bg-gray-100 rounded-lg">
@@ -87,8 +86,6 @@ function switchMode() {
     mode: 1 - roomStore.bulb.mode
   })
 }
-
-const lightThreshold = ref(30)
 </script>
 
 <style scoped>

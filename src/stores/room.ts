@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { service } from '@/services/baseServices'
 
@@ -29,6 +29,23 @@ interface fan {
 interface SensorData {
   time: string
   value: number
+}
+
+interface BulbData {
+  id: number
+  starttime: string
+  endtime: string
+  mode: number
+  state: number
+}
+
+interface FanData {
+  id: number
+  starttime: string
+  endtime: string
+  mode: number
+  state: number
+  threshold: number
 }
 
 export const useRoomStore = defineStore('room', () => {
@@ -74,9 +91,31 @@ export const useRoomStore = defineStore('room', () => {
   const flameSensors = ref({})
   const lightSensors = ref({})
   const temperatureSensors = ref({})
+
   const lightSensorData = ref<SensorData[]>([{ time: '...loading', value: -1 }])
   const tempSensorData = ref<SensorData[]>([{ time: '...loading', value: -1 }])
   const flameSensorData = ref<SensorData[]>([{ time: '...loading', value: -1 }])
+
+  const bulbData = ref<BulbData[]>([
+    {
+      id: -1,
+      starttime: '',
+      endtime: '',
+      mode: -1,
+      state: -1
+    }
+  ])
+
+  const fanData = ref<FanData[]>([
+    {
+      id: -1,
+      starttime: '',
+      endtime: '',
+      mode: -1,
+      state: -1,
+      threshold: -1
+    }
+  ])
 
   const temp = ref<number>(0)
 
@@ -106,12 +145,10 @@ export const useRoomStore = defineStore('room', () => {
 
   async function getLightData() {
     try {
-
       const res = await service.getData('/room/1')
       bulb.value = res.data.bulbs[0]
-      console.log('data' ,res.data)
+      console.log('data', res.data)
     } catch (e) {
-
       console.log(e)
     }
   }
@@ -151,9 +188,40 @@ export const useRoomStore = defineStore('room', () => {
       console.log(e)
     }
   }
+
+  async function getDeviceData(id: number, page: number) {
+    const devices = ['', '', 'bulbcontrolhistory', 'fancontrolhistory']
+    try {
+      const res = await service.getData(`/${devices[id]}/${id}?page=${page}`)
+      // if (id === 1) {
+      //   flameSensorData.value = res.data.data
+      //   currentPage.value[id] = res.data.currentPage
+      //   totalPage.value[id] = res.data.totalPage
+      // } else
+      if (id === 2) {
+        bulbData.value = res.data.data
+        currentPage.value[id] = res.data.currentPage
+        totalPage.value[id] = res.data.totalPage
+      } else {
+        fanData.value = res.data.data
+        currentPage.value[id] = res.data.currentPage
+        totalPage.value[id] = res.data.totalPage
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   async function goToPage(id: number, page: number) {
     if (page >= 1 && page <= totalPage.value[id]) {
       await getSensorData(id, page)
+      currentPage.value[id] = page
+    }
+  }
+
+  async function goToPageDevice(id: number, page: number) {
+    if (page >= 1 && page <= totalPage.value[id]) {
+      await getDeviceData(id, page)
       currentPage.value[id] = page
     }
   }
@@ -171,6 +239,10 @@ export const useRoomStore = defineStore('room', () => {
     tempSensorData,
     goToPage,
     getLightData,
-    bulb
+    bulb,
+    bulbData,
+    getDeviceData,
+    goToPageDevice,
+    fanData
   }
 })
