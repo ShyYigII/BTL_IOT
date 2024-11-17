@@ -105,7 +105,7 @@ interface Temperatures {
   Chậm: number
 }
 
-const isAutoMode = ref(roomStore.fan.mode === 0 ? false : true)
+const isAutoMode = computed(() => roomStore.fan.mode === 1 ? true : false)
 const temperatures = ref<Temperatures>({
   Nhanh: roomStore.fan.speeds[2].threshold,
   Vừa: roomStore.fan.speeds[1].threshold,
@@ -157,11 +157,13 @@ const handleChangeThreshold = async () => {
   await roomStore.getData()
 }
 async function switchMode() {
-  await roomStore.adjustFan(0, 1)
+  roomStore.fan.mode = 1-roomStore.fan.mode
+  await roomStore.adjustFan(roomStore.fan.state, roomStore.fan.mode)
 }
 
 onMounted(async () => {
   await roomStore.getData()
+  
   await roomStore.getSensorData(3, 1)
 
   getCurrentSpeed()

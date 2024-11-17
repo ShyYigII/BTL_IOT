@@ -122,9 +122,10 @@ export const useRoomStore = defineStore('room', () => {
   //   const doubleCount = computed(() => count.value * 2)
   async function getData() {
     try {
-      const res = (await service.getData('/room/1')).data[0]
+      const res = (await service.getData('/room/1')).data
       bulb.value = res['bulbs'][0]
       fan.value = res['fans'][0]
+      console.log(fan)
       flameSensors.value = res['flameSensors'][0]
       lightSensors.value = res['lightSensors'][0]
       temperatureSensors.value = res['temperatureSensors'][0]
@@ -144,7 +145,8 @@ export const useRoomStore = defineStore('room', () => {
         fan: {
           id: fan.value.id,
           state: fan.value.state,
-          mode: fan.value.mode
+          mode: fan.value.mode,
+          speeds: fan.value.speeds
         }
       })
     } catch (e) {
