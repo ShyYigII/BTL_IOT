@@ -49,7 +49,8 @@ onMounted(() => {
 const toggleLight = (): void => {
   roomStore.switchBulb({
     ...roomStore.bulb,
-    state: 1 - roomStore.bulb.state
+    state: 1 - roomStore.bulb.state,
+    mode: 0
   })
   roomStore.bulb.state = 1 - roomStore.bulb.state
 }
