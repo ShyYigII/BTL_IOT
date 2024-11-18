@@ -66,7 +66,9 @@
           >
             <div class="flex justify-between items-center mb-4">
               <div>
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Trong nhà</h2>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+                  Trong nhà({{ roomStore.room }})
+                </h2>
                 <p class="text-xl text-gray-600 font-semibold dark:text-gray-100">{{ time }}</p>
               </div>
               <div class="relative">

@@ -123,6 +123,11 @@
         </tr>
       </tbody>
     </table>
+
+    <h2 class="text-2xl font-bold mt-6 mb-4">Biểu đồ cài đặt tốc độ quạt theo nhiệt độ</h2>
+    <Bar :data="data" />
+
+    <h2 class="text-2xl font-bold mt-6 mb-4">Chế độ tự động dự đoán mức quạt dựa trên nhiệt độ</h2>
   </div>
   <!--pagination-->
 
@@ -233,6 +238,43 @@ function nextPage() {
 function goToPageDevice(page: number) {
   console.log('goto ', page)
   roomStore.goToPageDevice(activeTab.value, page)
+}
+
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
+} from 'chart.js'
+import { Bar } from 'vue-chartjs'
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+
+const data = {
+  labels: [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ],
+  datasets: [
+    {
+      label: 'Data One',
+      backgroundColor: '#f87979',
+      data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+    }
+  ]
 }
 </script>
 

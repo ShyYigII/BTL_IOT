@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { service } from '@/services/baseServices'
+import axios from 'axios'
 
 interface bulb {
   description: string
@@ -103,6 +104,7 @@ export const useRoomStore = defineStore('room', () => {
     ]
   })
 
+  const room = ref('')
   const currentPage = ref([1, 1, 1])
   const totalPage = ref([1, 1, 1])
 
@@ -161,6 +163,8 @@ export const useRoomStore = defineStore('room', () => {
       const res = (await service.getData('/room/1')).data
       bulb.value = res['bulbs'][0]
       fan.value = res['fans'][0]
+      room.value = res['name']
+
       console.log(fan)
       flameSensors.value = res['flameSensors'][0]
       lightSensors.value = res['lightSensors'][0]
@@ -256,11 +260,7 @@ export const useRoomStore = defineStore('room', () => {
     const devices = ['', 'fancontrolhistory', 'bulbcontrolhistory', '']
     try {
       const res = await service.getData(`/${devices[id]}/${id}?page=${page}`)
-      // if (id === 1) {
-      //   flameSensorData.value = res.data.data
-      //   currentPage.value[id] = res.data.currentPage
-      //   totalPage.value[id] = res.data.totalPage
-      // } else
+
       if (id === 2) {
         bulbData.value = res.data.data
         currentPage.value[id] = res.data.currentPage
@@ -283,6 +283,16 @@ export const useRoomStore = defineStore('room', () => {
       speedHistory.value = res.data.data
       currentPage.value[3] = res.data.currentPage
       totalPage.value[3] = res.data.totalPage
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async function predictSpeed(data) {
+    try {
+      const res = await axios.post('http://127.0.0.1:5000/predict', data)
+      console.log(res)
+      return res.data.predicted_speed
     } catch (e) {
       console.log(e)
     }
@@ -323,6 +333,8 @@ export const useRoomStore = defineStore('room', () => {
     fan,
     changeThreshhold,
     speedHistory,
-    getSpeedHistory
+    getSpeedHistory,
+    predictSpeed,
+    room
   }
 })

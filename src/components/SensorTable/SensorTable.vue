@@ -101,24 +101,6 @@ const roomStore = useRoomStore()
 
 onMounted(async () => {
   await roomStore.getSensorData(props.sensorId, 1)
-
-  // abc.value = [
-  //   ...(props.sensorId === 1
-  //     ? roomStore.flameSensorData.map((item) => item.time)
-  //     : props.sensorId === 2
-  //       ? roomStore.lightSensorData.map((item) => item.time)
-  //       : roomStore.tempSensorData.map((item) => item.time))
-  // ]
-
-  // console.log('abc', abc.value)
-
-  // xyz.value = [
-  //   ...(props.sensorId === 1
-  //     ? roomStore.flameSensorData.map((item) => item.value)
-  //     : props.sensorId === 2
-  //       ? roomStore.lightSensorData.map((item) => item.value)
-  //       : roomStore.tempSensorData.map((item) => item.value))
-  // ]
 })
 
 const props = defineProps<{
