@@ -1,30 +1,39 @@
 # IOT-BTL
 
-This template should help get you started developing with Vue 3 in Vite.
+Đây là hướng dãn  cài đặt dự án
 
-## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## IDE đề cử dùng khi chạy dự án:
+1. FE: VSCode
+2. BE: Intelij
 
 ## Project Setup
-
+1. Clone dự án từ git hub
+```sh
+git clone https://github.com/ShyYigII/BTL_IOT.git
+```
+2. Vào thư mục FE: gõ trong terminal
+  ```sh
+cd './FE'
+```
+3. Cài dependencies
 ```sh
 npm install
 ```
-
-### Compile and Hot-Reload for Development
-
+4. Chạy FE
 ```sh
 npm run dev
 ```
+5. Ra thư mục ngoài, mở thư mục BE bằng Intelij, dợi Intelij cài xong denpendencies
+```sh
+cd .. 
+```
+
+
+
+
+
+
 
 ### Type-Check, Compile and Minify for Production
 
