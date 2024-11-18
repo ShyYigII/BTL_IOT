@@ -1,7 +1,7 @@
 # IOT-BTL
-
 Đây là hướng dãn  cài đặt dự án
 
+## Tổng quan dự án
 
 ## IDE đề cử dùng khi chạy dự án:
 1. FE: VSCode
@@ -12,6 +12,10 @@
 ```sh
 git clone https://github.com/ShyYigII/BTL_IOT.git
 ```
+
+2. Vào thư mục Database. Chạy các file CreateDataBase, CreateProcedure, CreateData theo thứ tự
+
+
 2. Vào thư mục FE: gõ trong terminal
   ```sh
 cd './FE'
@@ -24,7 +28,7 @@ npm install
 ```sh
 npm run dev
 ```
-5. Ra thư mục ngoài, mở thư mục BE bằng Intelij, dợi Intelij cài xong denpendencies
+5. Vào thư mục BE bằng Intelij, dợi Intelij tự cài xong denpendencies
 ```sh
 cd .. 
 ```
@@ -35,14 +39,8 @@ cd ..
 
 
 
-### Type-Check, Compile and Minify for Production
 
-```sh
-npm run build
-```
 
-### Lint with [ESLint](https://eslint.org/)
 
-```sh
-npm run lint
-```
+
+
