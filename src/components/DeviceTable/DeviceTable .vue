@@ -1,37 +1,125 @@
 <template>
-  <div class="data-table-container">
-    <table class="data-table">
-      <thead>
+  <div class="max-w-full overflow-x-auto my-4 shadow-md rounded-lg dark:shadow-gray-700">
+    <table
+      class="w-full border-separate border-spacing-0 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm"
+    >
+      <thead class="bg-gray-100 dark:bg-gray-700">
         <tr>
-          <th class="stt-column">STT</th>
-          <th>
-            <button>Bắt đầu</button>
+          <th
+            class="w-[60px] p-3 font-bold uppercase tracking-wider text-gray-600 dark:text-gray-100"
+          >
+            STT
           </th>
-          <th>
-            <button>Kết thúc</button>
+          <th
+            v-if="props.sensorId === 3"
+            class="p-3 text-left font-bold text-gray-600 dark:text-gray-100"
+          >
+            Thời gian
           </th>
-          <th>
-            <button>Chế độ</button>
+          <th
+            v-if="props.sensorId === 3"
+            class="p-3 text-left font-bold text-gray-600 dark:text-gray-100"
+          >
+            Tốc độ quay
           </th>
-          <th>
-            <button>Trạng thái</button>
+          <th
+            v-if="props.sensorId === 3"
+            class="p-3 text-left font-bold text-gray-600 dark:text-gray-100"
+          >
+            Nhiệt độ
           </th>
-          <th v-if="props.sensorId === 1">
-            <button>Ngưỡng thiết lập</button>
+          <th
+            v-if="props.sensorId === 3"
+            class="p-3 text-left font-bold text-gray-600 dark:text-gray-100"
+          >
+            Người thay đổi
+          </th>
+
+          <th
+            v-if="props.sensorId !== 3"
+            class="p-3 text-left font-bold text-gray-600 dark:text-gray-100"
+          >
+            Bắt đầu
+          </th>
+          <th
+            v-if="props.sensorId !== 3"
+            class="p-3 text-left font-bold text-gray-600 dark:text-gray-100"
+          >
+            Kết thúc
+          </th>
+          <th
+            v-if="props.sensorId !== 3"
+            class="p-3 text-left font-bold text-gray-600 dark:text-gray-100"
+          >
+            Chế độ
+          </th>
+          <th
+            v-if="props.sensorId !== 3"
+            class="p-3 text-left font-bold text-gray-600 dark:text-gray-100"
+          >
+            Trạng thái
+          </th>
+          <th
+            v-if="props.sensorId === 1"
+            class="p-3 text-left font-bold text-gray-600 dark:text-gray-100"
+          >
+            Ngưỡng thiết lập
           </th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="(item, index) in props.sensorId === 2 ? roomStore.bulbData : roomStore.fanData"
+          v-for="(item, index) in props.sensorId === 2
+            ? roomStore.bulbData
+            : props.sensorId === 1
+              ? roomStore.fanData
+              : roomStore.speedHistory"
           :key="index"
+          class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300"
         >
-          <td class="stt-column">{{ index + 1 }}</td>
-          <td>{{ item?.starttime }}</td>
-          <td>{{ item?.endtime === null ? 'Hiện tại' : item?.endtime }}</td>
-          <td>{{ item?.mode }}</td>
-          <td>{{ item?.state }}</td>
-          <td v-if="props.sensorId === 1">{{ item?.threshold }}</td>
+          <td class="w-[60px] p-3 text-center border-b border-gray-200 dark:border-gray-600">
+            {{ index + 1 }}
+          </td>
+
+          <td
+            v-if="props.sensorId === 3"
+            class="w-[60px] p-3 text-center border-b border-gray-200 dark:border-gray-600"
+          >
+            {{ item?.time }}
+          </td>
+          <td
+            v-if="props.sensorId === 3"
+            class="w-[60px] p-3 text-center border-b border-gray-200 dark:border-gray-600"
+          >
+            {{ item?.speed }}
+          </td>
+          <td
+            v-if="props.sensorId === 3"
+            class="w-[60px] p-3 text-center border-b border-gray-200 dark:border-gray-600"
+          >
+            {{ item?.threshold }}
+          </td>
+          <td
+            v-if="props.sensorId === 3"
+            class="w-[60px] p-3 text-center border-b border-gray-200 dark:border-gray-600"
+          >
+            {{ item?.homeOwner?.name }}
+          </td>
+          <td v-if="props.sensorId !== 3" class="p-3 border-b border-gray-200 dark:border-gray-600">
+            {{ item?.starttime }}
+          </td>
+          <td v-if="props.sensorId !== 3" class="p-3 border-b border-gray-200 dark:border-gray-600">
+            {{ item?.endtime === null ? 'Hiện tại' : item?.endtime }}
+          </td>
+          <td v-if="props.sensorId !== 3" class="p-3 border-b border-gray-200 dark:border-gray-600">
+            {{ item?.mode }}
+          </td>
+          <td v-if="props.sensorId !== 3" class="p-3 border-b border-gray-200 dark:border-gray-600">
+            {{ item?.state }}
+          </td>
+          <td v-if="props.sensorId === 1" class="p-3 border-b border-gray-200 dark:border-gray-600">
+            {{ item?.threshold }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -105,6 +193,7 @@ const roomStore = useRoomStore()
 
 onMounted(async () => {
   await roomStore.getDeviceData(props.sensorId, 1)
+  await roomStore.getSpeedHistory()
 })
 
 const props = defineProps<{

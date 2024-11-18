@@ -1,15 +1,15 @@
 <template>
-  <div class="data-table-container">
-    <table class="data-table">
-      <thead>
+  <div class="max-w-full overflow-x-auto my-4 shadow-md rounded-lg">
+    <table class="w-full border-collapse bg-white dark:bg-gray-800 text-sm">
+      <thead class="bg-gray-100 dark:bg-gray-700">
         <tr>
-          <th class="stt-column">STT</th>
-          <th>
-            <button>Ngày</button>
+          <th
+            class="w-16 text-center py-3 px-4 font-semibold uppercase text-gray-600 dark:text-gray-200"
+          >
+            STT
           </th>
-          <th>
-            <button>Giá trị</button>
-          </th>
+          <th class="py-3 px-4 font-semibold text-gray-600 dark:text-gray-100">Ngày</th>
+          <th class="py-3 px-4 font-semibold text-gray-600 dark:text-gray-100">Giá trị</th>
         </tr>
       </thead>
       <tbody>
@@ -20,16 +20,17 @@
               ? roomStore.lightSensorData
               : roomStore.tempSensorData"
           :key="index"
+          class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
-          <td class="stt-column">{{ index + 1 }}</td>
-          <td>{{ item?.time }}</td>
-          <td>{{ item?.value }}</td>
+          <td class="w-16 text-center py-3 px-4">{{ index + 1 }}</td>
+          <td class="py-3 px-4">{{ item?.time }}</td>
+          <td class="py-3 px-4">{{ item?.value }}</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <!--pagination-->
 
+  <!-- Pagination -->
   <div class="flex justify-center mt-3">
     <nav class="mt-3" aria-label="Page navigation example">
       <ul class="inline-flex -space-x-px text-sm cursor-pointer">
@@ -87,6 +88,9 @@
       </ul>
     </nav>
   </div>
+
+  <h2 class="text-2xl font-bold mt-6 mb-4">Biểu đồ</h2>
+  <Line :data="data" />
 </template>
 
 <script setup lang="ts">
@@ -97,6 +101,24 @@ const roomStore = useRoomStore()
 
 onMounted(async () => {
   await roomStore.getSensorData(props.sensorId, 1)
+
+  // abc.value = [
+  //   ...(props.sensorId === 1
+  //     ? roomStore.flameSensorData.map((item) => item.time)
+  //     : props.sensorId === 2
+  //       ? roomStore.lightSensorData.map((item) => item.time)
+  //       : roomStore.tempSensorData.map((item) => item.time))
+  // ]
+
+  // console.log('abc', abc.value)
+
+  // xyz.value = [
+  //   ...(props.sensorId === 1
+  //     ? roomStore.flameSensorData.map((item) => item.value)
+  //     : props.sensorId === 2
+  //       ? roomStore.lightSensorData.map((item) => item.value)
+  //       : roomStore.tempSensorData.map((item) => item.value))
+  // ]
 })
 
 const props = defineProps<{
@@ -137,71 +159,46 @@ function goToPage(page: number) {
   console.log('goto ', page)
   roomStore.goToPage(activeTab.value, page)
 }
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
+import { Line } from 'vue-chartjs'
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
+
+const abc = computed(() => [
+  ...(props.sensorId === 1
+    ? roomStore.flameSensorData.map((item) => item.time)
+    : props.sensorId === 2
+      ? roomStore.lightSensorData.map((item) => item.time)
+      : roomStore.tempSensorData.map((item) => item.time))
+])
+const xyz = computed(() => [
+  ...(props.sensorId === 1
+    ? roomStore.flameSensorData.map((item) => item.value)
+    : props.sensorId === 2
+      ? roomStore.lightSensorData.map((item) => item.value)
+      : roomStore.tempSensorData.map((item) => item.value))
+])
+
+const data = computed(() => ({
+  labels: abc.value,
+  datasets: [
+    {
+      label: 'Giá trị đo được',
+      backgroundColor: '#f87979',
+      data: xyz.value
+    }
+  ]
+}))
 </script>
 
-<style scoped>
-.data-table-container {
-  max-width: 100%;
-  overflow-x: auto;
-  margin: 1rem 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background-color: #ffffff;
-  color: #333333;
-  font-size: 14px;
-}
-
-.data-table th,
-.data-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.data-table thead {
-  background-color: #f5f5f5;
-}
-
-.data-table th {
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #666666;
-}
-
-.data-table tbody tr:hover {
-  background-color: #f9f9f9;
-  transition: background-color 0.3s ease;
-}
-
-.stt-column {
-  width: 60px;
-  text-align: center;
-}
-
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  color: #666666;
-  transition: color 0.3s ease;
-}
-
-@media (max-width: 600px) {
-  .data-table th,
-  .data-table td {
-    padding: 8px 10px;
-  }
-
-  .data-table {
-    font-size: 12px;
-  }
-}
-</style>
+<style scoped></style>

@@ -8,8 +8,8 @@
         <div class="flex items-center py-4 lg:px-8 ml-auto relative">
           <nav>
             <ul class="flex px-4 space-x-8">
-              <li><a class="font-semibold" href="#">Docs</a></li>
-              <li><a class="font-semibold" href="#">Blogs</a></li>
+              <!-- <li><a class="font-semibold" href="#">Docs</a></li>
+              <li><a class="font-semibold" href="#">Blogs</a></li> -->
             </ul>
           </nav>
 

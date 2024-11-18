@@ -1,7 +1,9 @@
 <template>
   <Header />
   <Sidebar />
-  <div class="pt-[64px] pl-64">
+  <div
+    class="pt-[64px] pl-64 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-300 min-h-screen"
+  >
     <RouterView />
 
     <!-- Circular loading spinner -->

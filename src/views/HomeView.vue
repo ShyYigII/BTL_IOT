@@ -52,7 +52,7 @@
         </div>
       </div>
       <div
-        class="flex justify-center items-center min-h-[400px] bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900 dark:to-blue-900 rounded-lg shadow-md"
+        class="flex justify-center items-center min-h-[400px] p-4 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900 dark:to-blue-900 rounded-lg shadow-md"
       >
         <div
           :class="[
@@ -62,6 +62,7 @@
         >
           <div
             class="p-8 bg-gradient-to-br from-white/30 dark:from-gray-700/30 dark:to-gray-700/10 to-white/10 backdrop-blur-sm"
+            style="min-height: 368px"
           >
             <div class="flex justify-between items-center mb-4">
               <div>
@@ -69,7 +70,14 @@
                 <p class="text-xl text-gray-600 font-semibold dark:text-gray-100">{{ time }}</p>
               </div>
               <div class="relative">
-                <House size="30" />
+                <House
+                  size="30"
+                  :class="
+                    isOn
+                      ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(252,211,77,0.95)]'
+                      : 'text-gray-400'
+                  "
+                />
               </div>
             </div>
             <div
@@ -87,7 +95,9 @@
               <div class="bg-white/30 col-span-2 rounded-lg p-4 backdrop-blur-sm max-w-xs w-full">
                 <div class="flex items-center space-x-2">
                   <div style="width: 70px">
-                    <Fan :class="['h-6 w-6 mr-2 text-purple-500', fanIconClasses]" />
+                    <Fan
+                      :class="['h-6 w-6 mr-2 text-purple-500 dark:text-green-300', fanIconClasses]"
+                    />
                     <span class="text-sm text-gray-700 dark:text-gray-100">{{ fanSpeedText }}</span>
                   </div>
                   <div>
@@ -132,6 +142,10 @@ import { useRoomStore } from '@/stores/room'
 const roomStore = useRoomStore()
 
 const weatherStore = useWeatherStore()
+
+const isOn = computed(() => {
+  return roomStore.bulb.state === 1 ? true : false
+})
 
 onMounted(async () => {
   await weatherStore.fetchWeatherOutside()

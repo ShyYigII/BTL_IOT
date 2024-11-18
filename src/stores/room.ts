@@ -48,6 +48,24 @@ interface FanData {
   threshold: number
 }
 
+interface speedData {
+  id: number
+  time: string
+  speed: number
+  threshold: number
+  homeOwner: {
+    id: number
+    username: null
+    password: null
+    name: string
+  }
+  speedObject: {
+    id: number
+    speed: number
+    threshold: number
+  }
+}
+
 export const useRoomStore = defineStore('room', () => {
   const bulb = ref<bulb>({
     description: 'Main bulb in the living room',
@@ -116,6 +134,24 @@ export const useRoomStore = defineStore('room', () => {
       threshold: -1
     }
   ])
+
+  const speedHistory = ref<speedData>({
+    id: 6,
+    time: '2024-11-17 17:32:11',
+    speed: 3,
+    threshold: 35.0,
+    homeOwner: {
+      id: 1,
+      username: null,
+      password: null,
+      name: 'John Doe'
+    },
+    speedObject: {
+      id: 3,
+      speed: 3,
+      threshold: 35.0
+    }
+  })
 
   const temp = ref<number>(0)
 
@@ -239,6 +275,19 @@ export const useRoomStore = defineStore('room', () => {
     }
   }
 
+  async function getSpeedHistory() {
+    try {
+      // bulb.value.mode = 1 - bulb.value.mode
+      const res = await service.getData('/speedmodifyhistory/1 ')
+      console.log(res)
+      speedHistory.value = res.data.data
+      currentPage.value[3] = res.data.currentPage
+      totalPage.value[3] = res.data.totalPage
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   async function goToPage(id: number, page: number) {
     if (page >= 1 && page <= totalPage.value[id]) {
       await getSensorData(id, page)
@@ -272,6 +321,8 @@ export const useRoomStore = defineStore('room', () => {
     goToPageDevice,
     fanData,
     fan,
-    changeThreshhold
+    changeThreshhold,
+    speedHistory,
+    getSpeedHistory
   }
 })

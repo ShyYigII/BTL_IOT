@@ -1,6 +1,11 @@
 <template>
   <div class="flex items-center h-full">
-    <LightbulbIcon :class="['h-8 w-8 mr-2', isOn ? 'text-yellow-400' : 'text-gray-400']" />
+    <LightbulbIcon
+      :class="[
+        'h-8 w-8 mr-2',
+        isOn ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(252,211,77,0.8)]' : 'text-gray-400'
+      ]"
+    />
 
     <div class="flex flex-col">
       <p class="mt-2 text-sm text-gray-600 mb-2 font-semibold dark:text-gray-100">
