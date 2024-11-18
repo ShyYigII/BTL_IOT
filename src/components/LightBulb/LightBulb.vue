@@ -3,7 +3,9 @@
     <LightbulbIcon :class="['h-8 w-8 mr-2', isOn ? 'text-yellow-400' : 'text-gray-400']" />
 
     <div class="flex flex-col">
-      <p class="mt-2 text-sm text-gray-600 mb-2 font-semibold">{{ isOn ? 'Bật' : 'Tắt' }}</p>
+      <p class="mt-2 text-sm text-gray-600 mb-2 font-semibold dark:text-gray-100">
+        {{ isOn ? 'Bật' : 'Tắt' }}
+      </p>
       <button
         @click="toggleLight"
         :aria-pressed="isOn"

@@ -81,10 +81,10 @@ const isMobile = ref(window.innerWidth < 1024)
 
 const navItems = [
   { name: 'Trang chủ', icon: HomeIcon, href: '/' },
-  { name: 'Cài đặt', icon: SettingsIcon, href: '/setting' },
-  { name: 'Tài khoản của tôi', icon: CircleUserIcon, href: '/my-account' },
   { name: 'Thống kê', icon: ChartColumn, href: '/statistic' },
-  { name: 'Trợ giúp', icon: HelpCircleIcon, href: '/help' }
+  { name: 'Cài đặt thiết bị', icon: SettingsIcon, href: '/setting' },
+  { name: 'Tài khoản của tôi', icon: CircleUserIcon, href: '/my-account' }
+  // { name: 'Trợ giúp', icon: HelpCircleIcon, href: '/help' }
 ]
 
 const toggleSidebar = () => {

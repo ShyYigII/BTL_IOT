@@ -2,7 +2,7 @@
   <main class="flex justify-center" style="padding-top: 100px">
     <div class="grid grid-cols-1 md:grid-cols-2">
       <div
-        class="bg-gradient-to-r from-orange-100 to-purple-100 flex justify-center items-center min-h-[400px] p-4 rounded-lg shadow-md"
+        class="bg-gradient-to-r from-orange-100 to-purple-100 dark:from-orange-900 dark:to-purple-900 flex justify-center items-center min-h-[400px] p-4 rounded-lg shadow-md"
       >
         <div
           :class="[
@@ -10,26 +10,31 @@
             // getBackgroundColor
           ]"
         >
-          <div class="p-8 bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-sm">
+          <div
+            class="p-8 bg-gradient-to-br from-white/30 to-white/10 dark:from-gray-700/30 dark:to-gray-700/10 backdrop-blur-sm"
+          >
             <div class="flex justify-between items-center mb-6">
               <div>
-                <h2 class="text-3xl font-bold text-gray-800">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100">
                   {{ weatherData.location }}
                 </h2>
-                <p class="text-sm text-gray-600">{{ formattedDate }}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-100">{{ formattedDate }}</p>
               </div>
               <div class="relative">
-                <!-- <component :is="getWeatherIcon" class="h-20 w-20 text-white filter drop-shadow-lg" /> -->
                 <img :src="weatherData.condition.icon" />
               </div>
             </div>
             <div class="mb-6 bg-white/30 rounded-lg p-4 backdrop-blur-sm">
-              <p class="text-6xl font-bold text-gray-800">{{ weatherData.temperature }}°C</p>
-              <p class="text-lg text-gray-700">{{ weatherData.condition.text }}</p>
+              <p class="text-6xl font-bold text-gray-800 dark:text-gray-100">
+                {{ weatherData.temperature }}°C
+              </p>
+              <p class="text-lg text-gray-700 dark:text-gray-100">
+                {{ weatherData.condition.text }}
+              </p>
             </div>
-            <div class="grid grid-cols-2 gap-4 text-gray-700">
+            <div class="grid grid-cols-2 gap-4 text-gray-700 dark:text-gray-100">
               <div class="bg-white/30 rounded-lg p-3 backdrop-blur-sm flex items-center">
-                <Droplets class="h-6 w-6 mr-2 text-blue-500" />
+                <Droplets class="h-6 w-6 mr-2 text-blue-500 dark:text-blue-400" />
                 <div>
                   <p class="text-sm font-semibold">Độ ẩm</p>
                   <p class="text-lg">{{ weatherData.humidity }}%</p>
@@ -47,7 +52,7 @@
         </div>
       </div>
       <div
-        class="flex justify-center items-center min-h-[400px] bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg shadow-md"
+        class="flex justify-center items-center min-h-[400px] bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900 dark:to-blue-900 rounded-lg shadow-md"
       >
         <div
           :class="[
@@ -55,11 +60,13 @@
             // getBackgroundColor
           ]"
         >
-          <div class="p-8 bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-sm">
+          <div
+            class="p-8 bg-gradient-to-br from-white/30 dark:from-gray-700/30 dark:to-gray-700/10 to-white/10 backdrop-blur-sm"
+          >
             <div class="flex justify-between items-center mb-4">
               <div>
-                <h2 class="text-3xl font-bold text-gray-800 mb-2">Trong nhà</h2>
-                <p class="text-xl text-gray-600 font-semibold">{{ time }}</p>
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Trong nhà</h2>
+                <p class="text-xl text-gray-600 font-semibold dark:text-gray-100">{{ time }}</p>
               </div>
               <div class="relative">
                 <House size="30" />
@@ -69,11 +76,11 @@
               class="mb-6 bg-white/30 rounded-lg p-4 backdrop-blur-sm flex space-x-4 items-center"
             >
               <Thermometer :size="48" class="text-red-500" />
-              <p class="text-6xl font-bold text-gray-800">
+              <p class="text-6xl font-bold text-gray-800 dark:text-gray-100">
                 {{ roomStore.tempSensorData[0].value }}°C
               </p>
             </div>
-            <div class="grid grid-cols-3 gap-4 text-gray-700">
+            <div class="grid grid-cols-3 gap-4 text-gray-700 dark:text-gray-100">
               <div class="bg-white/30 rounded-lg backdrop-blur-sm flex justify-center">
                 <LightBulb :number="1" />
               </div>
@@ -81,7 +88,7 @@
                 <div class="flex items-center space-x-2">
                   <div style="width: 70px">
                     <Fan :class="['h-6 w-6 mr-2 text-purple-500', fanIconClasses]" />
-                    <span class="text-sm text-gray-700">{{ fanSpeedText }}</span>
+                    <span class="text-sm text-gray-700 dark:text-gray-100">{{ fanSpeedText }}</span>
                   </div>
                   <div>
                     <div class="space-y-2">
@@ -94,7 +101,7 @@
                         max="100"
                         step="1"
                       />
-                      <div class="flex justify-between text-xs text-gray-500">
+                      <div class="flex justify-between text-xs text-gray-500 dark:text-gray-100">
                         <span>0</span>
                         <span>50</span>
                         <span>100</span>
