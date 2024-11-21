@@ -1,46 +1,48 @@
-# IOT-BTL
-Đây là hướng dãn  cài đặt dự án
+# Hướng Dẫn Thiết Lập Dự Án IOT-BTL
 
-## Tổng quan dự án
+## Tổng Quan Dự Án
 
-## IDE đề cử dùng khi chạy dự án:
-1. FE: VSCode
-2. BE: Intelij
+## Các IDE Được Khuyến Nghị:
+1. Frontend: VSCode
+2. Backend: IntelliJ
+3. Cơ Sở Dữ Liệu: MySQL
 
-## Project Setup
-1. Clone dự án từ git hub
+## Các Bước Thiết Lập Dự Án
+
+1. Sao Chép Dự Án
 ```sh
 git clone https://github.com/ShyYigII/BTL_IOT.git
 ```
 
-2. Vào thư mục Database. Chạy các file CreateDataBase, CreateProcedure, CreateData theo thứ tự
+2. Thiết Lập Cơ Sở Dữ Liệu
+   - Truy cập thư mục Database
+   - Chạy các tệp SQL theo thứ tự:
+     a. CreateDatabase.sql
+     b. CreateStoreProcedure.sql
+     c. CreateData.sql
 
+3. Cấu Hình Frontend
+   - Vào thư mục FE
+   - Cài đặt các phụ thuộc
+   ```sh
+   npm install
+   ```
+   - Chạy frontend
+   ```sh
+   npm run dev
+   ```
 
-2. Vào thư mục FE: gõ trong terminal
-  ```sh
-cd './FE'
-```
-3. Cài dependencies
-```sh
-npm install
-```
-4. Chạy FE
-```sh
-npm run dev
-```
-5. Vào thư mục BE bằng Intelij, dợi Intelij tự cài xong denpendencies
-```sh
-cd .. 
-```
+4. Cấu Hình Backend
+   - Mở thư mục BE bằng IntelliJ
+   - Chờ IntelliJ cài đặt các phụ thuộc
+   - Sửa đổi kết nối cơ sở dữ liệu trong `src/main/java/com.homeautomation/dao/DAO.java`:
+     * Cập nhật cổng MySQL trong biến `dbUrl`
+     * Cập nhật tên người dùng và mật khẩu MySQL trong `DriverManager.getConnection()`
 
+5. Chạy Ứng Dụng
+   - Khởi chạy `Application.java` trong gói `com.homeautomation`
 
-
-
-
-
-
-
-
-
-
-
+## Ghi Chú Bổ Sung
+- Đảm bảo tất cả các phụ thuộc được cài đặt chính xác
+- Kiểm tra chi tiết kết nối cơ sở dữ liệu trước khi chạy
+- Khởi động lại ứng dụng nếu có bất kỳ thay đổi cấu hình nào
