@@ -38,8 +38,6 @@ git clone https://github.com/ShyYigII/BTL_IOT.git
    - Sửa đổi kết nối cơ sở dữ liệu trong `src/main/java/com.homeautomation/dao/DAO.java`:
      * Cập nhật cổng MySQL trong biến `dbUrl`
      * Cập nhật tên người dùng và mật khẩu MySQL trong `DriverManager.getConnection()`
-
-5. Chạy Ứng Dụng
    - Khởi chạy `Application.java` trong gói `com.homeautomation`
 
 ## Ghi Chú Bổ Sung
